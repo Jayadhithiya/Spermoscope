@@ -1,0 +1,26 @@
+# Big archives and bundles exceeding GitHub limits or binaries
+sperm_detection.zip
+*.apk
+*.aab
+*.jks
+*.keystore
+__MACOSX/
+
+# Flutter / Dart build directories
+**/build/
+**/.dart_tool/
+**/.pub-cache/
+**/.pub/
+**/android/.gradle/
+**/.gradle/
+**/android/local.properties
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment & IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store

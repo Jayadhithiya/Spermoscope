@@ -1,0 +1,26 @@
+<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="844" rx="44" fill="#F1F5F9"/>
+  <path d="M0 0H390V160C390 175.464 377.464 188 362 188H28C12.536 188 0 175.464 0 160V0Z" fill="#0F274A"/>
+  <text x="24" y="70" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#93C5FD">&#8592; Back to Login</text>
+  <text x="24" y="105" font-family="Plus Jakarta Sans, sans-serif" font-size="20" font-weight="800" fill="white">Practitioner Registration</text>
+  <rect x="20" y="160" width="350" height="500" rx="18" fill="white" stroke="#E2E8F0"/>
+  
+  <text x="40" y="200" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600" fill="#475569">Full Name &amp; Title</text>
+  <rect x="40" y="210" width="310" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text x="52" y="235" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#0F172A">Dr. Ayesha Malik</text>
+
+  <text x="40" y="280" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600" fill="#475569">Specialization</text>
+  <rect x="40" y="290" width="310" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text x="52" y="315" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#0F172A">Andrology &amp; Reproductive Biology</text>
+
+  <text x="40" y="360" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600" fill="#475569">Medical License ID</text>
+  <rect x="40" y="370" width="310" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text x="52" y="395" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#0F172A">MED-ANDRO-8841</text>
+
+  <text x="40" y="440" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600" fill="#475569">Institutional Email</text>
+  <rect x="40" y="450" width="310" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text x="52" y="475" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#0F172A">ayesha@hospital.org</text>
+
+  <rect x="40" y="580" width="310" height="46" rx="10" fill="#0F274A"/>
+  <text x="195" y="608" font-family="Plus Jakarta Sans, sans-serif" font-size="13" font-weight="700" fill="white" text-anchor="middle">Create Account &#8594;</text>
+</svg>

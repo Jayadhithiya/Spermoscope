@@ -1,0 +1,340 @@
+import os
+
+artboards = [
+    {
+        "filename": "01_Splash_Screen.svg",
+        "title": "01 • Splash Screen",
+        "content": """<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="splashBg" x1="195" y1="0" x2="195" y2="844" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#07152B"/>
+      <stop offset="55%" stop-color="#0F274A"/>
+      <stop offset="100%" stop-color="#132F5A"/>
+    </linearGradient>
+    <filter id="glowEffect" x="80" y="240" width="230" height="230" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="16" result="blur"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="390" height="844" rx="44" fill="url(#splashBg)"/>
+  
+  <!-- Glowing Rings & App Icon -->
+  <circle cx="195" cy="340" r="72" fill="#38BDF8" fill-opacity="0.2" filter="url(#glowEffect)"/>
+  <circle cx="195" cy="340" r="62" stroke="#60A5FA" stroke-width="2" stroke-opacity="0.4"/>
+  <circle cx="195" cy="340" r="50" fill="white"/>
+  <circle cx="195" cy="340" r="38" fill="#1E293B"/>
+  <path d="M205 330C205 338 198 345 190 345C186.8 345 183.8 344 181.4 342.3L171 352.7C169.8 353.9 167.8 353.9 166.6 352.7C165.4 351.5 165.4 349.5 166.6 348.3L177 337.9C175.3 335.6 174.3 332.6 174.3 329.4C174.3 321.1 181 314.4 189.3 314.4C197.6 314.4 205 321.1 205 330Z" fill="white"/>
+  <path d="M180 345C177 350 170 355 163 360" stroke="white" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Brand Typography -->
+  <text x="195" y="450" font-family="Plus Jakarta Sans, Roboto, sans-serif" font-size="24" font-weight="800" letter-spacing="4" fill="white" text-anchor="middle">SPERMOSCOPE</text>
+  <rect x="75" y="470" width="240" height="26" rx="13" fill="white" fill-opacity="0.1" stroke="white" stroke-opacity="0.2"/>
+  <text x="195" y="487" font-family="Plus Jakarta Sans, Roboto, sans-serif" font-size="10" font-weight="600" letter-spacing="1" fill="#93C5FD" text-anchor="middle">AUTOMATED MOTILITY ANALYSIS</text>
+
+  <!-- Loading State -->
+  <circle cx="180" cy="540" r="4" fill="#60A5FA"/>
+  <circle cx="195" cy="540" r="4" fill="#60A5FA"/>
+  <circle cx="210" cy="540" r="4" fill="#60A5FA"/>
+  <text x="195" y="565" font-family="Plus Jakarta Sans, Roboto, sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle">Initializing Clinical Core...</text>
+
+  <!-- Footer -->
+  <text x="195" y="800" font-family="Plus Jakarta Sans, Roboto, sans-serif" font-size="10" fill="white" fill-opacity="0.4" text-anchor="middle">WHO 2021 Reference Standards • SIMATS v1.0.0</text>
+</svg>"""
+    },
+    {
+        "filename": "02_Clinical_Login.svg",
+        "title": "02 • Clinical Login",
+        "content": """<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="844" rx="44" fill="#F1F5F9"/>
+  <path d="M0 0H390V190C390 205.464 377.464 218 362 218H28C12.536 218 0 205.464 0 190V0Z" fill="#0F274A"/>
+  
+  <!-- Logo / Brand Header -->
+  <rect x="24" y="60" width="44" height="44" rx="12" fill="white"/>
+  <path d="M42 74V90M34 74H50" stroke="#0F274A" stroke-width="2.5" stroke-linecap="round"/>
+  <text x="80" y="85" font-family="Plus Jakarta Sans, sans-serif" font-size="18" font-weight="800" fill="white" letter-spacing="1.5">SPERMOSCOPE</text>
+  <text x="80" y="100" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="500" fill="#93C5FD">Clinical Precision Diagnostics</text>
+
+  <!-- Login Card -->
+  <rect x="20" y="180" width="350" height="440" rx="18" fill="white" stroke="#E2E8F0"/>
+  
+  <!-- Role Tabs -->
+  <rect x="40" y="204" width="310" height="38" rx="8" fill="#F1F5F9"/>
+  <rect x="42" y="206" width="153" height="34" rx="6" fill="white"/>
+  <text x="118" y="227" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="700" fill="#0F274A" text-anchor="middle">Doctor</text>
+  <text x="272" y="227" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="600" fill="#64748B" text-anchor="middle">Admin</text>
+
+  <!-- Input: Email -->
+  <text x="40" y="272" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600" fill="#475569">Clinical Email</text>
+  <rect x="40" y="282" width="310" height="42" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text x="52" y="308" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#0F172A">doctor@demo.com</text>
+
+  <!-- Input: Password -->
+  <text x="40" y="352" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600" fill="#475569">Password</text>
+  <rect x="40" y="362" width="310" height="42" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text x="52" y="389" font-family="Plus Jakarta Sans, sans-serif" font-size="16" fill="#0F172A">••••••••••••</text>
+
+  <!-- Submit CTA -->
+  <rect x="40" y="440" width="310" height="46" rx="10" fill="#0F274A"/>
+  <text x="195" y="468" font-family="Plus Jakarta Sans, sans-serif" font-size="13" font-weight="700" fill="white" text-anchor="middle">Sign In to Dashboard &rarr;</text>
+
+  <!-- Quick Demo Pills -->
+  <rect x="40" y="510" width="310" height="85" rx="8" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="52" y="530" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="700" fill="#475569">⚡ One-Click Demo Logins:</text>
+  <rect x="52" y="542" width="135" height="24" rx="4" fill="#E2E8F0"/>
+  <text x="60" y="558" font-family="Plus Jakarta Sans, sans-serif" font-size="10" font-weight="600" fill="#1E3A8A">Doctor: doctor@demo.com</text>
+  <rect x="195" y="542" width="135" height="24" rx="4" fill="#E2E8F0"/>
+  <text x="203" y="558" font-family="Plus Jakarta Sans, sans-serif" font-size="10" font-weight="600" fill="#1E3A8A">Admin: admin@demo.com</text>
+</svg>"""
+    },
+    {
+        "filename": "03_Practitioner_Registration.svg",
+        "title": "03 • Practitioner Registration",
+        "content": """<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="844" rx="44" fill="#F1F5F9"/>
+  <path d="M0 0H390V160C390 175.464 377.464 188 362 188H28C12.536 188 0 175.464 0 160V0Z" fill="#0F274A"/>
+  <text x="24" y="70" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#93C5FD">&larr; Back to Login</text>
+  <text x="24" y="105" font-family="Plus Jakarta Sans, sans-serif" font-size="20" font-weight="800" fill="white">Practitioner Registration</text>
+  <rect x="20" y="160" width="350" height="500" rx="18" fill="white" stroke="#E2E8F0"/>
+  
+  <text x="40" y="200" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600" fill="#475569">Full Name &amp; Title</text>
+  <rect x="40" y="210" width="310" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text x="52" y="235" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#0F172A">Dr. Ayesha Malik</text>
+
+  <text x="40" y="280" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600" fill="#475569">Specialization</text>
+  <rect x="40" y="290" width="310" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text x="52" y="315" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#0F172A">Andrology &amp; Reproductive Biology</text>
+
+  <text x="40" y="360" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600" fill="#475569">Medical License ID</text>
+  <rect x="40" y="370" width="310" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text x="52" y="395" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#0F172A">MED-ANDRO-8841</text>
+
+  <text x="40" y="440" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600" fill="#475569">Institutional Email</text>
+  <rect x="40" y="450" width="310" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text x="52" y="475" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#0F172A">ayesha@hospital.org</text>
+
+  <rect x="40" y="580" width="310" height="46" rx="10" fill="#0F274A"/>
+  <text x="195" y="608" font-family="Plus Jakarta Sans, sans-serif" font-size="13" font-weight="700" fill="white" text-anchor="middle">Create Account &rarr;</text>
+</svg>"""
+    },
+    {
+        "filename": "04_Clinical_Dashboard.svg",
+        "title": "04 • Clinical Dashboard",
+        "content": """<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="844" rx="44" fill="#F8FAFC"/>
+  <!-- Top Bar -->
+  <rect width="390" height="120" fill="#0F274A"/>
+  <circle cx="45" cy="70" r="20" fill="#1E3A8A" stroke="#38BDF8" stroke-width="2"/>
+  <text x="45" y="75" font-family="Plus Jakarta Sans, sans-serif" font-size="13" font-weight="700" fill="white" text-anchor="middle">DD</text>
+  <text x="75" y="68" font-family="Plus Jakarta Sans, sans-serif" font-size="14" font-weight="700" fill="white">Dr. Demo</text>
+  <text x="75" y="82" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#93C5FD">Andrology Unit • SIMATS</text>
+
+  <!-- Metric Cards -->
+  <rect x="20" y="136" width="165" height="84" rx="14" fill="white" stroke="#E2E8F0"/>
+  <text x="36" y="160" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#64748B">Total Patients</text>
+  <text x="36" y="190" font-family="Plus Jakarta Sans, sans-serif" font-size="22" font-weight="800" fill="#0F274A">142</text>
+  <rect x="205" y="136" width="165" height="84" rx="14" fill="white" stroke="#E2E8F0"/>
+  <text x="221" y="160" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#64748B">Samples Tested</text>
+  <text x="221" y="190" font-family="Plus Jakarta Sans, sans-serif" font-size="22" font-weight="800" fill="#0F274A">389</text>
+
+  <!-- Primary Action -->
+  <rect x="20" y="234" width="350" height="74" rx="14" fill="#1E3A8A"/>
+  <text x="40" y="266" font-family="Plus Jakarta Sans, sans-serif" font-size="15" font-weight="700" fill="white">+ New Semen Analysis</text>
+  <text x="40" y="284" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#93C5FD">Record patient &amp; upload chamber sample</text>
+
+  <!-- Recent Patient List -->
+  <text x="24" y="340" font-family="Plus Jakarta Sans, sans-serif" font-size="13" font-weight="700" fill="#0F172A">Recent Patient Analyses</text>
+  
+  <!-- Row 1 -->
+  <rect x="20" y="354" width="350" height="58" rx="12" fill="white" stroke="#E2E8F0"/>
+  <text x="36" y="378" font-family="Plus Jakarta Sans, sans-serif" font-size="13" font-weight="700" fill="#0F172A">Ali Raza (p001)</text>
+  <text x="36" y="396" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#64748B">Age 32 • Conc: 42.0 M/mL • Motility: 65%</text>
+  <rect x="260" y="370" width="94" height="22" rx="11" fill="#DCFCE7"/>
+  <text x="307" y="385" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="700" fill="#15803D" text-anchor="middle">Normozoospermic</text>
+
+  <!-- Row 2 -->
+  <rect x="20" y="420" width="350" height="58" rx="12" fill="white" stroke="#E2E8F0"/>
+  <text x="36" y="444" font-family="Plus Jakarta Sans, sans-serif" font-size="13" font-weight="700" fill="#0F172A">Bilal Ahmed (p002)</text>
+  <text x="36" y="462" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#64748B">Age 28 • Conc: 15.0 M/mL • Motility: 40%</text>
+  <rect x="270" y="436" width="84" height="22" rx="11" fill="#FEE2E2"/>
+  <text x="312" y="451" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="700" fill="#B91C1C" text-anchor="middle">Oligospermia</text>
+
+  <!-- Bottom Nav -->
+  <rect y="784" width="390" height="60" fill="white" stroke="#E2E8F0"/>
+  <text x="50" y="820" font-family="Plus Jakarta Sans, sans-serif" font-size="10" font-weight="700" fill="#1E3A8A" text-anchor="middle">Dashboard</text>
+  <text x="145" y="820" font-family="Plus Jakarta Sans, sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">Patients</text>
+  <text x="245" y="820" font-family="Plus Jakarta Sans, sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">Sample</text>
+  <text x="340" y="820" font-family="Plus Jakarta Sans, sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">Analytics</text>
+</svg>"""
+    },
+    {
+        "filename": "05_Patient_Intake_Record.svg",
+        "title": "05 • Patient Intake Record",
+        "content": """<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="844" rx="44" fill="#F1F5F9"/>
+  <rect width="390" height="150" fill="#0F274A"/>
+  <text x="24" y="70" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#93C5FD">&larr; Back to Dashboard</text>
+  <text x="24" y="105" font-family="Plus Jakarta Sans, sans-serif" font-size="20" font-weight="800" fill="white">Patient Intake Record</text>
+  
+  <rect x="20" y="140" width="350" height="520" rx="18" fill="white" stroke="#E2E8F0"/>
+  
+  <text x="40" y="180" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600" fill="#475569">Patient Name</text>
+  <rect x="40" y="190" width="310" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text x="52" y="215" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#0F172A">Ali Raza</text>
+
+  <text x="40" y="255" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600" fill="#475569">Age (Years)</text>
+  <rect x="40" y="265" width="145" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text x="52" y="290" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#0F172A">32</text>
+
+  <text x="205" y="255" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600" fill="#475569">Abstinence (Days)</text>
+  <rect x="205" y="265" width="145" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text x="217" y="290" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#0F172A">3</text>
+
+  <rect x="40" y="325" width="310" height="34" rx="8" fill="#F1F5F9"/>
+  <text x="52" y="346" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600" fill="#475569">Calculated BMI:</text>
+  <rect x="235" y="330" width="105" height="24" rx="12" fill="#DCFCE7"/>
+  <text x="287" y="346" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="800" fill="#059669" text-anchor="middle">22.8 (Normal)</text>
+
+  <rect x="40" y="580" width="310" height="46" rx="10" fill="#0F274A"/>
+  <text x="195" y="608" font-family="Plus Jakarta Sans, sans-serif" font-size="13" font-weight="700" fill="white" text-anchor="middle">Proceed to Sample Capture &rarr;</text>
+</svg>"""
+    },
+    {
+        "filename": "06_Sample_Microscopic_Capture.svg",
+        "title": "06 • Sample Microscopic Capture",
+        "content": """<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="844" rx="44" fill="#F1F5F9"/>
+  <rect width="390" height="150" fill="#0F274A"/>
+  <text x="24" y="70" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#93C5FD">&larr; Back to Patient</text>
+  <text x="24" y="105" font-family="Plus Jakarta Sans, sans-serif" font-size="20" font-weight="800" fill="white">Sample Chamber Capture</text>
+  
+  <rect x="20" y="140" width="350" height="480" rx="18" fill="white" stroke="#E2E8F0"/>
+  
+  <!-- Viewfinder -->
+  <rect x="36" y="156" width="318" height="210" rx="12" fill="#07152B" stroke="#38BDF8" stroke-dasharray="4 4"/>
+  <circle cx="195" cy="261" r="60" stroke="#38BDF8" stroke-opacity="0.3"/>
+  <line x1="36" y1="261" x2="354" y2="261" stroke="#38BDF8" stroke-opacity="0.2"/>
+  <line x1="195" y1="156" x2="195" y2="366" stroke="#38BDF8" stroke-opacity="0.2"/>
+  
+  <circle cx="130" cy="220" r="4" fill="#10B981"/>
+  <circle cx="240" cy="270" r="4" fill="#10B981"/>
+  <circle cx="210" cy="210" r="4" fill="#F59E0B"/>
+  <circle cx="160" cy="300" r="3.5" fill="#EF4444"/>
+
+  <rect x="46" y="166" width="110" height="20" rx="4" fill="black" fill-opacity="0.6"/>
+  <text x="52" y="180" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="700" fill="#38BDF8">REC • 1080p @ 60 FPS</text>
+
+  <rect x="36" y="490" width="318" height="46" rx="10" fill="#1E3A8A"/>
+  <text x="195" y="518" font-family="Plus Jakarta Sans, sans-serif" font-size="13" font-weight="700" fill="white" text-anchor="middle">Run AI Classification &rarr;</text>
+</svg>"""
+    },
+    {
+        "filename": "07_Neural_AI_Tracking.svg",
+        "title": "07 • Neural AI Tracking",
+        "content": """<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="844" rx="44" fill="#07152B"/>
+  <text x="195" y="160" font-family="Plus Jakarta Sans, sans-serif" font-size="13" font-weight="700" fill="#38BDF8" letter-spacing="2" text-anchor="middle">NEURAL MOTILITY ENGINE</text>
+  
+  <circle cx="195" cy="340" r="100" stroke="#38BDF8" stroke-opacity="0.4" stroke-width="2" fill="#0F274A" fill-opacity="0.5"/>
+  <circle cx="195" cy="340" r="60" stroke="#38BDF8" stroke-opacity="0.3" stroke-dasharray="4 4"/>
+  
+  <path d="M140 380 Q 160 320, 210 330 T 260 280" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
+  <path d="M160 270 Q 200 360, 220 380" fill="none" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+  
+  <text x="195" y="500" font-family="Plus Jakarta Sans, sans-serif" font-size="18" font-weight="800" fill="white" text-anchor="middle">Segmenting Trajectories...</text>
+  <text x="195" y="530" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle">Calculating VCL &amp; VSL Velocities</text>
+</svg>"""
+    },
+    {
+        "filename": "08_WHO_2021_Diagnostic_Report.svg",
+        "title": "08 • WHO 2021 Diagnostic Report",
+        "content": """<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="844" rx="44" fill="#F8FAFC"/>
+  <rect width="390" height="190" fill="#0F274A"/>
+  <text x="24" y="60" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#93C5FD">&larr; Dashboard</text>
+  <text x="24" y="90" font-family="Plus Jakarta Sans, sans-serif" font-size="18" font-weight="800" fill="white">Ali Raza • 32 Yrs</text>
+  <rect x="24" y="110" width="160" height="28" rx="14" fill="#10B981" fill-opacity="0.2" stroke="#10B981"/>
+  <text x="104" y="128" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="800" fill="#10B981" text-anchor="middle">✓ NORMOZOOSPERMIC</text>
+
+  <!-- Metric Details Card -->
+  <rect x="20" y="210" width="350" height="340" rx="14" fill="white" stroke="#E2E8F0"/>
+  <text x="36" y="240" font-family="Plus Jakarta Sans, sans-serif" font-size="13" font-weight="700" fill="#0F172A">WHO 2021 Reference Standards</text>
+  
+  <!-- Concentration -->
+  <text x="36" y="275" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="600" fill="#1E293B">Sperm Concentration</text>
+  <text x="354" y="275" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="800" fill="#0F274A" text-anchor="end">42.0 M/mL (≥15)</text>
+  <rect x="36" y="285" width="318" height="8" rx="4" fill="#F1F5F9"/>
+  <rect x="36" y="285" width="250" height="8" rx="4" fill="#10B981"/>
+
+  <!-- Total Motility -->
+  <text x="36" y="325" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="600" fill="#1E293B">Total Motility (PR + NP)</text>
+  <text x="354" y="325" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="800" fill="#0F274A" text-anchor="end">65% (≥42%)</text>
+  <rect x="36" y="335" width="318" height="8" rx="4" fill="#F1F5F9"/>
+  <rect x="36" y="335" width="230" height="8" rx="4" fill="#10B981"/>
+
+  <!-- Progressive Motility -->
+  <text x="36" y="375" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="600" fill="#1E293B">Progressive Motility (PR)</text>
+  <text x="354" y="375" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="800" fill="#0F274A" text-anchor="end">52% (≥30%)</text>
+  <rect x="36" y="385" width="318" height="8" rx="4" fill="#F1F5F9"/>
+  <rect x="36" y="385" width="210" height="8" rx="4" fill="#0D99FF"/>
+</svg>"""
+    },
+    {
+        "filename": "09_Motility_Kinetics_Analytics.svg",
+        "title": "09 • Motility Kinetics Analytics",
+        "content": """<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="844" rx="44" fill="#F8FAFC"/>
+  <rect width="390" height="120" fill="#0F274A"/>
+  <text x="24" y="65" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#93C5FD">&larr; Results</text>
+  <text x="24" y="90" font-family="Plus Jakarta Sans, sans-serif" font-size="16" font-weight="800" fill="white">Motility Kinetics Curves</text>
+
+  <!-- Bar Chart Card -->
+  <rect x="20" y="140" width="350" height="240" rx="14" fill="white" stroke="#E2E8F0"/>
+  <text x="36" y="170" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="700" fill="#0F274A">Concentration by Field (M/mL)</text>
+  
+  <rect x="45" y="270" width="30" height="50" rx="4" fill="#3B82F6"/>
+  <rect x="95" y="260" width="30" height="60" rx="4" fill="#3B82F6"/>
+  <rect x="145" y="245" width="30" height="75" rx="4" fill="#3B82F6"/>
+  <rect x="195" y="230" width="30" height="90" rx="4" fill="#1D4ED8"/>
+  <rect x="245" y="235" width="30" height="85" rx="4" fill="#3B82F6"/>
+  <rect x="295" y="220" width="30" height="100" rx="4" fill="#1D4ED8"/>
+</svg>"""
+    }
+]
+
+out_dir = r"d:\Jay PDD\Jay PDD\Spermoscope\Spermoscope\figma_prototype\artboards"
+os.makedirs(out_dir, exist_ok=True)
+
+# Sanitize XML entities for strict SVG compliance
+def clean_xml_entities(xml_str):
+    return xml_str.replace("&rarr;", "&#8594;").replace("&larr;", "&#8592;")
+
+# Generate individual artboards
+for a in artboards:
+    path = os.path.join(out_dir, a["filename"])
+    content = clean_xml_entities(a["content"].strip())
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(content)
+    print(f"Generated: {path}")
+
+# Generate Complete Multi-Artboard Canvas
+total_width = (390 + 40) * len(artboards) + 40
+canvas_svg = f"""<svg width="{total_width}" height="960" viewBox="0 0 {total_width} 960" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="{total_width}" height="960" fill="#141414"/>
+"""
+
+for i, a in enumerate(artboards):
+    x = 40 + i * (390 + 40)
+    canvas_svg += f"""
+  <g transform="translate({x}, 60)">
+    <text x="0" y="-18" font-family="Plus Jakarta Sans, sans-serif" font-size="14" font-weight="700" fill="#A0A0A0">{a['title']}</text>
+    {clean_xml_entities(a['content'])}
+  </g>
+"""
+
+canvas_svg += "</svg>"
+
+combined_path = os.path.join(out_dir, "Spermoscope_Complete_Figma_UI_Kit.svg")
+with open(combined_path, "w", encoding="utf-8") as f:
+    f.write(clean_xml_entities(canvas_svg.strip()))
+print(f"Generated Combined Canvas: {combined_path}")
+
