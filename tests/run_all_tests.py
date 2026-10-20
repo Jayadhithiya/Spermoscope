@@ -38,8 +38,16 @@ def ensure_backend_running(base_url="http://127.0.0.1:8080"):
     print(f"[!] Backend not responding at {base_url}. Spawning background instance...")
     backend_script = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "mock_backend", "app.py"))
     proc = subprocess.Popen([sys.executable, backend_script], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    time.sleep(2.0)
-    print(f"[OK] Spawned mock backend PID: {proc.pid}")
+    for attempt in range(1, 16):
+        time.sleep(1.0)
+        try:
+            r = requests.get(f"{base_url}/recent_patients", timeout=1.0)
+            if r.status_code == 200:
+                print(f"[OK] Backend service is active and responding (HTTP 200). PID: {proc.pid}")
+                return proc
+        except Exception:
+            pass
+    print(f"[WARN] Backend startup timeout after 15 seconds. Proceeding with execution.")
     return proc
 
 def main():

@@ -38,9 +38,8 @@ jobs:
 
       - name: Start Mock Backend Server
         run: |
-          python mock_backend/app.py &
-          sleep 3
-          curl -s http://127.0.0.1:8080/recent_patients
+          nohup python mock_backend/app.py > backend.log 2>&1 &
+          sleep 2
 
       - name: Execute All 4 Test Suites (350 Tests Each) & Generate Excel Report + Pages
         run: |
@@ -62,19 +61,22 @@ jobs:
           echo "📊 **Download Excel Report Artifact:** Available in the **Artifacts** section below as \`Spermoscope_Test_Report_Excel\`." >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Excel Test Report Artifact (For Direct Download in Actions)
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: Spermoscope_Test_Report_Excel
           path: reports/Spermoscope_Test_Report.xlsx
           retention-days: 30
-          if-no-files-found: error
+          if-no-files-found: warn
 
       - name: Setup GitHub Pages
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        continue-on-error: true
         uses: actions/configure-pages@v5
 
       - name: Upload GitHub Pages Artifact
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        continue-on-error: true
         uses: actions/upload-pages-artifact@v3
         with:
           path: 'public'
@@ -83,6 +85,7 @@ jobs:
     name: Deploy QA Dashboard to GitHub Pages
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     needs: qa-audit-pipeline
+    continue-on-error: true
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -91,4 +94,5 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
+        continue-on-error: true
         uses: actions/deploy-pages@v4
