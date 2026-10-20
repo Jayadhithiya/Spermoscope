@@ -95,12 +95,13 @@ const APP_SCREENS = [
 
           <div class="form-group">
             <label class="form-label">Clinical Email</label>
-            <input type="email" id="loginEmail" class="input-box" value="doctor@demo.com" placeholder="doctor@demo.com" />
+            <input type="email" id="loginEmail" class="input-box" value="" placeholder="doctor@hospital.com" />
           </div>
 
           <div class="form-group">
             <label class="form-label">Password</label>
-            <input type="password" id="loginPwd" class="input-box" value="••••••••" placeholder="Enter secure password" />
+            <input type="password" id="loginPwd" class="input-box" value="" placeholder="e.g. Doctor@2024" />
+            <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Requires: 1 capital letter & 1 special character</div>
           </div>
 
           <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-bottom: 14px;">
@@ -110,13 +111,7 @@ const APP_SCREENS = [
             <span style="color: #1e3a8a; font-weight: 600; cursor: pointer;" onclick="goToScreen('signup')">Forgot?</span>
           </div>
 
-          <button class="btn-submit-app" onclick="goToScreen('home')">Sign In to Dashboard &#8594;</button>
-
-          <div class="demo-credentials-box">
-            <div style="font-weight: 700; color: #475569; margin-bottom: 4px;">⚡ Quick Demo Accounts:</div>
-            <div class="demo-chip" onclick="fillCreds('doctor@demo.com', 'password123')">Doctor: doctor@demo.com</div>
-            <div class="demo-chip" onclick="fillCreds('admin@demo.com', 'admin123')">Admin: admin@demo.com</div>
-          </div>
+          <button class="btn-submit-app" onclick="handlePrototypeLogin()">Sign In to Dashboard &#8594;</button>
 
           <div style="text-align: center; margin-top: 14px; font-size: 11px; color: #64748b;">
             New practitioner? <span style="color: #1e3a8a; font-weight: 700; cursor: pointer;" onclick="goToScreen('signup')">Register here</span>

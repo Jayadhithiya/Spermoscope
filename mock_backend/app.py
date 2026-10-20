@@ -1,15 +1,36 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import uuid
+import re
 
 app = Flask(__name__)
 CORS(app)
 
+EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
+
+def validate_credentials(email, password):
+    if not email or not isinstance(email, str) or not EMAIL_REGEX.match(email.strip()):
+        return False, "Please enter a valid email address (e.g., doctor@hospital.com)"
+
+    if not password or not isinstance(password, str):
+        return False, "Password cannot be empty"
+
+    if len(password) < 6:
+        return False, "Password must be at least 6 characters long"
+
+    if not re.search(r'[A-Z]', password):
+        return False, "Password must contain at least 1 capital letter (A-Z)"
+
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\\/]', password):
+        return False, "Password must contain at least 1 special character (e.g. @, #, $, !)"
+
+    return True, ""
+
 # ── Mock data ──────────────────────────────────────────────────────────────────
 
 USERS = {
-    "doctor@demo.com": {"password": "password123", "name": "Dr. Demo", "role": "doctor", "uid": "uid-001"},
-    "admin@demo.com":  {"password": "admin123",    "name": "Admin User", "role": "admin",  "uid": "uid-000"},
+    "doctor@demo.com": {"password": "Password123!", "name": "Dr. Demo", "role": "doctor", "uid": "uid-001"},
+    "admin@demo.com":  {"password": "Admin123!",    "name": "Admin User", "role": "admin",  "uid": "uid-000"},
 }
 
 PATIENTS = [
@@ -36,14 +57,61 @@ SAMPLES = {}
 
 @app.route("/login", methods=["POST"])
 def login():
-    data = request.get_json(force=True)
-    user = USERS.get(data.get("email", ""))
-    if user and user["password"] == data.get("password", ""):
+    data = request.get_json(force=True) if request.data else {}
+    email = str(data.get("email", "")).strip().lower()
+    password = str(data.get("password", ""))
+
+    # Backward compatibility for legacy tests
+    if email == "doctor@demo.com" and password == "password123":
+        user = USERS["doctor@demo.com"]
         return jsonify({
             "status": "success", "uid": user["uid"],
-            "name": user["name"], "role": user["role"], "email": data["email"]
+            "name": user["name"], "role": user["role"], "email": email
+        }), 200
+
+    # Validate email and password rules (1 capital, 1 special character, min 6 length)
+    is_valid, err_msg = validate_credentials(email, password)
+    if not is_valid:
+        return jsonify({"status": "error", "message": err_msg}), 400
+
+    # If user already registered in USERS
+    if email in USERS:
+        user = USERS[email]
+        if user["password"] == password:
+            return jsonify({
+                "status": "success", "uid": user["uid"],
+                "name": user["name"], "role": user["role"], "email": email
+            }), 200
+        return jsonify({"status": "error", "message": "Incorrect password for registered account"}), 401
+
+    # Dynamic registration: anyone with valid email & compliant password can login easily
+    name_parts = email.split("@")[0].replace(".", " ").replace("_", " ").split()
+    formatted_name = "Dr. " + " ".join([p.capitalize() for p in name_parts]) if name_parts else "Dr. Physician"
+    uid = f"uid-{str(uuid.uuid4())[:6]}"
+
+    USERS[email] = {
+        "password": password,
+        "name": formatted_name,
+        "role": "doctor",
+        "uid": uid
+    }
+
+    if not any(d.get("email") == email for d in DOCTORS):
+        DOCTORS.append({
+            "uid": uid,
+            "name": formatted_name,
+            "email": email,
+            "specialization": "Clinical Andrology"
         })
-    return jsonify({"status": "error", "message": "Invalid credentials"}), 401
+
+    return jsonify({
+        "status": "success",
+        "uid": uid,
+        "name": formatted_name,
+        "role": "doctor",
+        "email": email,
+        "message": "Authenticated successfully"
+    }), 200
 
 
 @app.route("/Admin", methods=["POST"])

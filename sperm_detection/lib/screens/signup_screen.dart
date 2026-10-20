@@ -24,19 +24,35 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
-  void _fillAdminDemo() {
-    setState(() {
-      _nameController.text = 'admin';
-      _passwordController.text = 'admin123';
-    });
-  }
-
   Future<void> _signup(BuildContext context) async {
     final name = _nameController.text.trim();
     final password = _passwordController.text;
 
-    if (name.isEmpty || password.isEmpty) {
-      _showSnack('Please enter admin credentials', isError: true);
+    final hasCapital = RegExp(r'[A-Z]');
+    final hasSpecial = RegExp(r'[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\\/]');
+
+    if (name.isEmpty) {
+      _showSnack('Please enter your administrator ID or email', isError: true);
+      return;
+    }
+
+    if (password.isEmpty) {
+      _showSnack('Please enter your password', isError: true);
+      return;
+    }
+
+    if (password.length < 6) {
+      _showSnack('Password must be at least 6 characters long', isError: true);
+      return;
+    }
+
+    if (!hasCapital.hasMatch(password)) {
+      _showSnack('Password must contain at least 1 capital letter (A-Z)', isError: true);
+      return;
+    }
+
+    if (!hasSpecial.hasMatch(password)) {
+      _showSnack('Password must contain at least 1 special character (!@#\$%^&*)', isError: true);
       return;
     }
 
@@ -65,7 +81,14 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         );
       } else {
-        _showSnack('Access denied: Invalid admin credentials', isError: true);
+        String errMsg = 'Access denied: Invalid admin credentials';
+        try {
+          final resData = json.decode(response.body);
+          if (resData['message'] != null) {
+            errMsg = resData['message'];
+          }
+        } catch (_) {}
+        _showSnack(errMsg, isError: true);
       }
     } catch (e) {
       setState(() => _isLoading = false);
@@ -265,7 +288,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                               decoration: InputDecoration(
-                                hintText: 'admin or admin@demo.com',
+                                hintText: 'admin@hospital.com',
                                 hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
                                 prefixIcon: const Icon(Icons.person_rounded, color: Color(0xFF64748B), size: 20),
                                 filled: true,
@@ -302,7 +325,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                               decoration: InputDecoration(
-                                hintText: '••••••••••••',
+                                hintText: 'Enter password (e.g. Admin@2024)',
                                 hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
                                 prefixIcon: const Icon(Icons.key_rounded, color: Color(0xFF64748B), size: 20),
                                 suffixIcon: IconButton(
@@ -325,6 +348,17 @@ class _SignupScreenState extends State<SignupScreen> {
                                   borderSide: const BorderSide(color: Color(0xFF4338CA), width: 2),
                                 ),
                               ),
+                            ),
+                            const SizedBox(height: 6),
+                            Row(
+                              children: const [
+                                Icon(Icons.info_outline, size: 13, color: Color(0xFF64748B)),
+                                SizedBox(width: 4),
+                                Text(
+                                  'Requires: 1 capital letter & 1 special character',
+                                  style: TextStyle(color: Color(0xFF64748B), fontSize: 11),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 24),
 
@@ -367,52 +401,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       ),
                               ),
                             ),
-                            const SizedBox(height: 20),
-
-                            // Quick Fill Demo
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFEEF2FF),
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: const Color(0xFFC7D2FE)),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.lock_clock_rounded, size: 16, color: Color(0xFF4338CA)),
-                                  const SizedBox(width: 8),
-                                  const Expanded(
-                                    child: Text(
-                                      'Quick Demo: admin / admin123',
-                                      style: TextStyle(
-                                        color: Color(0xFF312E81),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: _fillAdminDemo,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFF4338CA),
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      child: const Text(
-                                        'Auto Fill',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 16),
 
                             const Divider(color: Color(0xFFE2E8F0)),
                             const SizedBox(height: 14),

@@ -34,19 +34,41 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _fillDemo(String email, String pwd) {
-    setState(() {
-      _emailController.text = email;
-      _passwordController.text = pwd;
-    });
-  }
-
   Future<void> _login(BuildContext context) async {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
-      _showSnack('Please enter your email and password', isError: true);
+    final emailRegex = RegExp(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$');
+    final hasCapital = RegExp(r'[A-Z]');
+    final hasSpecial = RegExp(r'[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\\/]');
+
+    if (email.isEmpty) {
+      _showSnack('Please enter your email address', isError: true);
+      return;
+    }
+
+    if (!emailRegex.hasMatch(email)) {
+      _showSnack('Please enter a valid email (e.g., doctor@hospital.com)', isError: true);
+      return;
+    }
+
+    if (password.isEmpty) {
+      _showSnack('Please enter your password', isError: true);
+      return;
+    }
+
+    if (password.length < 6) {
+      _showSnack('Password must be at least 6 characters long', isError: true);
+      return;
+    }
+
+    if (!hasCapital.hasMatch(password)) {
+      _showSnack('Password must contain at least 1 capital letter (A-Z)', isError: true);
+      return;
+    }
+
+    if (!hasSpecial.hasMatch(password)) {
+      _showSnack('Password must contain at least 1 special character (!@#\$%^&*)', isError: true);
       return;
     }
 
@@ -74,7 +96,14 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         );
       } else {
-        _showSnack('Invalid email or password. Please try again.', isError: true);
+        String errMsg = 'Invalid email or password.';
+        try {
+          final resData = json.decode(response.body);
+          if (resData['message'] != null) {
+            errMsg = resData['message'];
+          }
+        } catch (_) {}
+        _showSnack(errMsg, isError: true);
       }
     } catch (e) {
       setState(() => _isLoading = false);
@@ -248,7 +277,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                               decoration: InputDecoration(
-                                hintText: 'doctor@demo.com',
+                                hintText: 'doctor@hospital.com',
                                 hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
                                 prefixIcon: const Icon(Icons.mail_outline_rounded, color: Color(0xFF64748B), size: 20),
                                 filled: true,
@@ -285,7 +314,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                               decoration: InputDecoration(
-                                hintText: '••••••••••••',
+                                hintText: 'Enter password (e.g. Doc#2024)',
                                 hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
                                 prefixIcon: const Icon(Icons.lock_outline_rounded, color: Color(0xFF64748B), size: 20),
                                 suffixIcon: IconButton(
@@ -308,6 +337,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                   borderSide: const BorderSide(color: Color(0xFF2563EB), width: 2),
                                 ),
                               ),
+                            ),
+                            const SizedBox(height: 6),
+                            Row(
+                              children: const [
+                                Icon(Icons.info_outline, size: 13, color: Color(0xFF64748B)),
+                                SizedBox(width: 4),
+                                Text(
+                                  'Requires: 1 capital letter & 1 special character',
+                                  style: TextStyle(color: Color(0xFF64748B), fontSize: 11),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 24),
 
@@ -350,52 +390,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                               ),
                             ),
-                            const SizedBox(height: 20),
-
-                            // Demo Quick-Fill Pill
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFF0FDF4),
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: const Color(0xFFBBF7D0)),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.key_rounded, size: 16, color: Color(0xFF15803D)),
-                                  const SizedBox(width: 8),
-                                  const Expanded(
-                                    child: Text(
-                                      'Quick Demo: doctor@demo.com',
-                                      style: TextStyle(
-                                        color: Color(0xFF166534),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () => _fillDemo('doctor@demo.com', 'password123'),
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFF15803D),
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      child: const Text(
-                                        'Auto Fill',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 16),
 
                             const Divider(color: Color(0xFFE2E8F0)),
                             const SizedBox(height: 14),

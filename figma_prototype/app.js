@@ -229,12 +229,43 @@ function exportAllScreensSvg() {
   downloadFile(combinedContent, `Spermoscope_Complete_Figma_UI_Kit.svg`);
 }
 
-// Helper: Demo login credential autocompletion
-function fillCreds(email, pwd) {
+// Helper: Prototype login validation
+function handlePrototypeLogin() {
   const emailInput = document.getElementById('loginEmail');
   const pwdInput = document.getElementById('loginPwd');
-  if (emailInput) emailInput.value = email;
-  if (pwdInput) pwdInput.value = pwd;
+  const email = (emailInput ? emailInput.value : '').trim();
+  const pwd = pwdInput ? pwdInput.value : '';
+
+  const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+  const hasCapital = /[A-Z]/;
+  const hasSpecial = /[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\\/]/;
+
+  if (!email) {
+    alert('Please enter your email address');
+    return;
+  }
+  if (!emailRegex.test(email)) {
+    alert('Please enter a valid email address (e.g. doctor@hospital.com)');
+    return;
+  }
+  if (!pwd) {
+    alert('Please enter your password');
+    return;
+  }
+  if (pwd.length < 6) {
+    alert('Password must be at least 6 characters long');
+    return;
+  }
+  if (!hasCapital.test(pwd)) {
+    alert('Password must contain at least 1 capital letter (A-Z)');
+    return;
+  }
+  if (!hasSpecial.test(pwd)) {
+    alert('Password must contain at least 1 special character (!@#$%^&*)');
+    return;
+  }
+
+  goToScreen('home');
 }
 
 // Helper: Role tab switch in login
@@ -242,11 +273,6 @@ function setRole(role) {
   document.querySelectorAll('.role-tab-btn').forEach(btn => {
     btn.classList.toggle('active', btn.textContent.toLowerCase().includes(role));
   });
-  if (role === 'admin') {
-    fillCreds('admin@demo.com', 'admin123');
-  } else {
-    fillCreds('doctor@demo.com', 'password123');
-  }
 }
 
 // Copy Design Tokens
