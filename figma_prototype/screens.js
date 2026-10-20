@@ -138,7 +138,7 @@ const APP_SCREENS = [
         <!-- Email Input -->
         <text x="40" y="268" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600" fill="#475569">Clinical Email</text>
         <rect x="40" y="278" width="310" height="42" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
-        <text x="52" y="304" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#0F172A">doctor@demo.com</text>
+        <text x="52" y="304" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#0F172A">doctor@hospital.com</text>
         <!-- Password Input -->
         <text x="40" y="348" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="600" fill="#475569">Password</text>
         <rect x="40" y="358" width="310" height="42" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
