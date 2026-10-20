@@ -23,6 +23,7 @@ from test_vulnerability import VulnerabilityTestSuite
 from test_appium import AppiumTestSuite
 from test_load import BaselineLoadTestSuite
 from report_generator import ExcelReportGenerator
+from generate_html_dashboard import generate_dashboard
 
 def ensure_backend_running(base_url="http://127.0.0.1:8080"):
     print(f"[*] Checking backend service health at {base_url}...")
@@ -88,6 +89,11 @@ def main():
     output_xlsx = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "reports", "Spermoscope_Test_Report.xlsx"))
     generator = ExcelReportGenerator(output_path=output_xlsx)
     report_file = generator.generate(selenium_results, vuln_results, appium_results, load_results)
+
+    # Generate HTML Dashboard for GitHub Pages
+    print("\n[*] Generating Interactive Dashboard & Assets for GitHub Pages...")
+    public_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "public"))
+    generate_dashboard(selenium_results, vuln_results, appium_results, load_results, output_dir=public_dir, xlsx_path=output_xlsx)
 
     total_time = time.perf_counter() - overall_start
     total_tests = len(selenium_results) + len(vuln_results) + len(appium_results) + len(load_results)
