@@ -70,7 +70,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _fetchRecentPatients() async {
     setState(() => _loadingPatients = true);
     try {
-      final response = await http.get(Uri.parse('${Urls.Url}/recent_patients'));
+      final emailParam = Uri.encodeComponent(widget.email.trim());
+      final response = await http.get(Uri.parse('${Urls.Url}/recent_patients?email=$emailParam'));
       if (response.statusCode == 200) {
         final decoded = json.decode(response.body);
         if (mounted && decoded is List) {

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spermoscope • Interactive Mobile Figma Prototype</title>
+  <meta name="description" content="High-fidelity interactive Figma prototype and UI kit for the Spermoscope Automated Semen Analysis System.">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Figma Header -->
+  <header class="figma-header">
+    <div class="header-left">
+      <div class="figma-logo-badge">
+        <div class="figma-icon">F</div>
+        <span>Prototype Mirror</span>
+      </div>
+      <div class="project-title">
+        <span>Spermoscope Mobile App</span>
+        <span class="tag-badge">WHO 2021 Clinical UI</span>
+      </div>
+    </div>
+
+    <!-- Center Mode Switcher -->
+    <div class="header-center">
+      <div class="mode-pill-selector">
+        <button class="mode-btn active" data-mode="prototype" onclick="setMode('prototype')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Interactive Prototype
+        </button>
+        <button class="mode-btn" data-mode="canvas" onclick="setMode('canvas')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          All Artboards (Canvas)
+        </button>
+      </div>
+
+      <select id="screenSelectDropdown" class="screen-select-dropdown" onchange="goToScreen(this.value)">
+        <!-- Populated via JS -->
+      </select>
+    </div>
+
+    <!-- Right Actions -->
+    <div class="header-right">
+      <div style="display: flex; gap: 4px; background: #121212; padding: 2px; border-radius: 6px; border: 1px solid var(--figma-border);">
+        <button class="mode-btn zoom-btn" style="padding: 4px 8px;" data-zoom="0.8" onclick="setZoom(0.8)">80%</button>
+        <button class="mode-btn zoom-btn active" style="padding: 4px 8px;" data-zoom="1.0" onclick="setZoom(1.0)">100%</button>
+      </div>
+
+      <button class="btn-secondary-figma" onclick="exportCurrentScreenSvg()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export Screen SVG
+      </button>
+
+      <button class="btn-primary-figma" onclick="exportAllScreensSvg()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        Download All For Figma
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="prototype-workspace">
+
+    <!-- Left Sidebar: Screen Flow Tree -->
+    <aside class="figma-sidebar-left">
+      <div class="sidebar-section-title">
+        <span>Artboards Flow</span>
+        <span style="font-size: 10px; color: var(--figma-blue);">9 Screens</span>
+      </div>
+      <ul id="screenTree" class="screen-tree">
+        <!-- Populated via screens.js -->
+      </ul>
+
+      <div style="padding: 12px; border-top: 1px solid var(--figma-border); font-size: 11px; color: var(--figma-text-muted);">
+        <div style="font-weight: 600; color: var(--figma-text-secondary); margin-bottom: 4px;">💡 Figma Tip:</div>
+        Drag the exported <code>.svg</code> file directly into any Figma canvas to get instant auto-layout vector frames!
+      </div>
+    </aside>
+
+    <!-- Center Canvas Area -->
+    <section class="figma-canvas-area" id="canvasArea">
+
+      <!-- Interactive Phone Mockup (Presentation Mode) -->
+      <div class="device-frame-wrapper" id="deviceFrameWrapper">
+        <div class="device-frame">
+          <!-- Dynamic Island -->
+          <div class="dynamic-island">
+            <div class="camera-lens"></div>
+            <div class="sensor-dot"></div>
+          </div>
+
+          <!-- Status Bar -->
+          <div class="phone-status-bar" id="phoneStatusBar">
+            <span id="deviceClock">09:41</span>
+            <div class="status-icons">
+              <!-- 5G icon -->
+              <span style="font-size: 10px; font-weight: 800; letter-spacing: -0.5px;">5G</span>
+              <!-- Wifi Icon -->
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-4.9-3.9l1.4 1.4C9.7 14.6 10.8 14 12 14s2.3.6 3.5 1.5l1.4-1.4C15.4 12.8 13.8 12 12 12s-3.4.8-4.9 2.1zm-4-4l1.4 1.4C6.7 9.8 9.2 8.8 12 8.8s5.3 1 7.5 2.7l1.4-1.4C18.3 8.1 15.3 7 12 7s-6.3 1.1-8.9 3.1z"/></svg>
+              <!-- Battery Icon -->
+              <svg width="18" height="12" viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="1" width="19" height="12" rx="3"/><rect x="3" y="3" width="13" height="8" rx="1.5" fill="currentColor"/><path d="M22 5v4"/></svg>
+            </div>
+          </div>
+
+          <!-- Phone Inner Screen Viewport -->
+          <div class="device-screen">
+            <div id="screenViewport" class="screen-viewport">
+              <!-- Active screen injected dynamically -->
+            </div>
+          </div>
+
+          <!-- Hardware Home Indicator -->
+          <div class="home-indicator-bar" id="homeIndicator"></div>
+        </div>
+      </div>
+
+      <!-- Canvas Grid View (All 9 Artboards side-by-side) -->
+      <div class="artboards-grid-view" id="artboardsGridView">
+        <!-- Generated dynamically via JS -->
+      </div>
+
+    </section>
+
+    <!-- Right Sidebar: Design Tokens & Specs -->
+    <aside class="figma-sidebar-right">
+      <div class="token-group">
+        <div class="token-title" style="display: flex; justify-content: space-between; align-items: center;">
+          <span>Color Styles</span>
+          <button class="btn-secondary-figma" style="font-size: 10px; padding: 2px 6px;" onclick="copyTokens()">Copy</button>
+        </div>
+        <div class="color-swatch-grid">
+          <div class="swatch-card" onclick="navigator.clipboard.writeText('#0F274A')">
+            <div class="swatch-circle" style="background: #0F274A;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Clinical Navy</div>
+              <div class="swatch-hex">#0F274A</div>
+            </div>
+          </div>
+          <div class="swatch-card" onclick="navigator.clipboard.writeText('#1E3A8A')">
+            <div class="swatch-circle" style="background: #1E3A8A;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Deep Blue</div>
+              <div class="swatch-hex">#1E3A8A</div>
+            </div>
+          </div>
+          <div class="swatch-card" onclick="navigator.clipboard.writeText('#38BDF8')">
+            <div class="swatch-circle" style="background: #38BDF8;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Cyan Glow</div>
+              <div class="swatch-hex">#38BDF8</div>
+            </div>
+          </div>
+          <div class="swatch-card" onclick="navigator.clipboard.writeText('#F1F5F9')">
+            <div class="swatch-circle" style="background: #F1F5F9;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Slate 100</div>
+              <div class="swatch-hex">#F1F5F9</div>
+            </div>
+          </div>
+          <div class="swatch-card" onclick="navigator.clipboard.writeText('#10B981')">
+            <div class="swatch-circle" style="background: #10B981;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Normo Green</div>
+              <div class="swatch-hex">#10B981</div>
+            </div>
+          </div>
+          <div class="swatch-card" onclick="navigator.clipboard.writeText('#EF4444')">
+            <div class="swatch-circle" style="background: #EF4444;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Oligo Red</div>
+              <div class="swatch-hex">#EF4444</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="token-group">
+        <div class="token-title">Typography System</div>
+        <div style="font-size: 11px; display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--figma-text-secondary);">Headline H1:</span>
+            <span style="font-weight: 800;">26px • Bold (800)</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--figma-text-secondary);">Headline H2:</span>
+            <span style="font-weight: 700;">20px • Bold (700)</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--figma-text-secondary);">Body Text:</span>
+            <span>13px • Regular (400)</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--figma-text-secondary);">Badge / Caps:</span>
+            <span style="font-weight: 600; letter-spacing: 0.8px;">10px • Semibold</span>
+          </div>
+          <div style="margin-top: 4px; color: var(--figma-text-muted); font-size: 10px;">
+            Font Stack: Plus Jakarta Sans / Roboto
+          </div>
+        </div>
+      </div>
+
+      <div class="token-group">
+        <div class="token-title">How to Use in Figma</div>
+        <ol style="font-size: 11px; color: var(--figma-text-secondary); padding-left: 16px; line-height: 1.6;">
+          <li>Click <b>"Download All For Figma"</b> at the top.</li>
+          <li>Open <b>Figma</b> in your browser or desktop app.</li>
+          <li>Drag the downloaded <code>.svg</code> file onto your Figma canvas.</li>
+          <li>Figma instantly turns every artboard into editable vector layers, fonts, shapes, and colors!</li>
+        </ol>
+      </div>
+    </aside>
+
+  </main>
+
+  <script src="screens.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

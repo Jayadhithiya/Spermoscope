@@ -1,0 +1,30 @@
+<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="844" rx="44" fill="#F8FAFC"/>
+  <rect width="390" height="190" fill="#0F274A"/>
+  <text x="24" y="60" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#93C5FD">&#8592; Dashboard</text>
+  <text x="24" y="90" font-family="Plus Jakarta Sans, sans-serif" font-size="18" font-weight="800" fill="white">Ali Raza • 32 Yrs</text>
+  <rect x="24" y="110" width="160" height="28" rx="14" fill="#10B981" fill-opacity="0.2" stroke="#10B981"/>
+  <text x="104" y="128" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="800" fill="#10B981" text-anchor="middle">✓ NORMOZOOSPERMIC</text>
+
+  <!-- Metric Details Card -->
+  <rect x="20" y="210" width="350" height="340" rx="14" fill="white" stroke="#E2E8F0"/>
+  <text x="36" y="240" font-family="Plus Jakarta Sans, sans-serif" font-size="13" font-weight="700" fill="#0F172A">WHO 2021 Reference Standards</text>
+  
+  <!-- Concentration -->
+  <text x="36" y="275" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="600" fill="#1E293B">Sperm Concentration</text>
+  <text x="354" y="275" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="800" fill="#0F274A" text-anchor="end">42.0 M/mL (≥15)</text>
+  <rect x="36" y="285" width="318" height="8" rx="4" fill="#F1F5F9"/>
+  <rect x="36" y="285" width="250" height="8" rx="4" fill="#10B981"/>
+
+  <!-- Total Motility -->
+  <text x="36" y="325" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="600" fill="#1E293B">Total Motility (PR + NP)</text>
+  <text x="354" y="325" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="800" fill="#0F274A" text-anchor="end">65% (≥42%)</text>
+  <rect x="36" y="335" width="318" height="8" rx="4" fill="#F1F5F9"/>
+  <rect x="36" y="335" width="230" height="8" rx="4" fill="#10B981"/>
+
+  <!-- Progressive Motility -->
+  <text x="36" y="375" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="600" fill="#1E293B">Progressive Motility (PR)</text>
+  <text x="354" y="375" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="800" fill="#0F274A" text-anchor="end">52% (≥30%)</text>
+  <rect x="36" y="385" width="318" height="8" rx="4" fill="#F1F5F9"/>
+  <rect x="36" y="385" width="210" height="8" rx="4" fill="#0D99FF"/>
+</svg>

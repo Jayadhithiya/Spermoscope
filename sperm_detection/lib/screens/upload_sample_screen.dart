@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -63,12 +64,19 @@ class _UploadSampleScreenState extends State<UploadSampleScreen> {
       setState(() => _isUploading = false);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        _showSnack('Specimen uploaded and queued for motility tracking!');
+        _showSnack('Specimen uploaded and analyzed successfully!');
         Future.delayed(const Duration(milliseconds: 600), () {
           if (mounted) Navigator.pop(context, true);
         });
       } else {
-        _showSnack('Upload failed: ${response.statusCode}', isError: true);
+        String errorMsg = 'Upload failed: ${response.statusCode}';
+        try {
+          final errBody = jsonDecode(response.body);
+          if (errBody is Map && errBody['message'] != null) {
+            errorMsg = errBody['message'].toString();
+          }
+        } catch (_) {}
+        _showSnack(errorMsg, isError: true);
       }
     } catch (e) {
       setState(() => _isUploading = false);
@@ -82,6 +90,7 @@ class _UploadSampleScreenState extends State<UploadSampleScreen> {
       SnackBar(
         content: Text(msg),
         backgroundColor: isError ? const Color(0xFFDC2626) : const Color(0xFF059669),
+        duration: Duration(seconds: isError ? 5 : 2),
       ),
     );
   }

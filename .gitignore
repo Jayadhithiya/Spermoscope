@@ -19,6 +19,17 @@ __MACOSX/
 __pycache__/
 *.pyc
 
+# Environment & Secret Keys
+.env
+.env.*
+!.env.example
+
+# Local databases & uploads
+*.db
+*.sqlite3
+semen_analysis/uploads/*
+!semen_analysis/uploads/.gitkeep
+
 # Environment & IDE
 .vscode/
 .idea/

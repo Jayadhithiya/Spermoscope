@@ -252,7 +252,52 @@ class _ViewResultScreenState extends State<ViewResultScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 28),
+                      const SizedBox(height: 20),
+
+                      if (_resultDetails?['observations'] != null && _resultDetails!['observations'].toString().isNotEmpty) ...[
+                        Container(
+                          padding: const EdgeInsets.all(18),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF8FAFC),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: const Color(0xFFCBD5E1)),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const Icon(Icons.auto_awesome_rounded, color: Color(0xFF2563EB), size: 18),
+                                  const SizedBox(width: 8),
+                                  const Text(
+                                    'AI Clinical Observations (WHO Criteria)',
+                                    style: TextStyle(color: Color(0xFF1E293B), fontSize: 13, fontWeight: FontWeight.w700),
+                                  ),
+                                  const Spacer(),
+                                  if (_resultDetails?['confidence'] != null)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFEFF6FF),
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      child: Text(
+                                        'Confidence: ${(double.tryParse(_resultDetails!['confidence'].toString()) ?? 0.9 * 100).toStringAsFixed(0)}%',
+                                        style: const TextStyle(color: Color(0xFF1E40AF), fontSize: 11, fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                _resultDetails!['observations'].toString(),
+                                style: const TextStyle(color: Color(0xFF334155), fontSize: 13, height: 1.4),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                      ],
 
                       // Back Button
                       SizedBox(

@@ -1,0 +1,1040 @@
+/* ==========================================================================
+   SPERMOSCOPE FIGMA PROTOTYPE SYSTEM - MODERN STYLING
+   ========================================================================== */
+
+:root {
+  --figma-bg: #1e1e1e;
+  --figma-canvas: #141414;
+  --figma-surface: #2c2c2c;
+  --figma-surface-hover: #383838;
+  --figma-border: #383838;
+  --figma-border-light: #444444;
+  --figma-text: #ffffff;
+  --figma-text-secondary: #a0a0a0;
+  --figma-text-muted: #707070;
+  --figma-blue: #0d99ff;
+  --figma-blue-hover: #007be5;
+  --figma-purple: #7b61ff;
+  --figma-green: #10b981;
+  --figma-red: #ef4444;
+  --figma-amber: #f59e0b;
+
+  /* App Brand Tokens */
+  --app-primary: #0f274a;
+  --app-secondary: #1e3a8a;
+  --app-accent: #38bdf8;
+  --app-bg: #f1f5f9;
+  --app-surface: #ffffff;
+  --app-text-main: #0f172a;
+  --app-text-muted: #64748b;
+  --app-border: #e2e8f0;
+  --app-success: #059669;
+  --app-warning: #d97706;
+  --app-danger: #dc2626;
+
+  --font-ui: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-ui);
+  background-color: var(--figma-canvas);
+  color: var(--figma-text);
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --------------------------------------------------------------------------
+   Top Figma Header & Controls
+   -------------------------------------------------------------------------- */
+.figma-header {
+  height: 52px;
+  background-color: var(--figma-bg);
+  border-bottom: 1px solid var(--figma-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+.header-left, .header-center, .header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.figma-logo-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+}
+
+.figma-icon {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #F24E1E 0%, #A259FF 50%, #0ACF83 100%);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 11px;
+  color: white;
+}
+
+.project-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--figma-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tag-badge {
+  background-color: rgba(13, 153, 255, 0.15);
+  color: var(--figma-blue);
+  border: 1px solid rgba(13, 153, 255, 0.3);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  letter-spacing: 0.2px;
+}
+
+/* View Mode Switcher */
+.mode-pill-selector {
+  display: flex;
+  background-color: #121212;
+  border-radius: 8px;
+  padding: 3px;
+  border: 1px solid var(--figma-border);
+}
+
+.mode-btn {
+  background: none;
+  border: none;
+  color: var(--figma-text-secondary);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.18s ease;
+}
+
+.mode-btn:hover {
+  color: var(--figma-text);
+}
+
+.mode-btn.active {
+  background-color: var(--figma-surface);
+  color: var(--figma-text);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Action Buttons */
+.btn-primary-figma {
+  background-color: var(--figma-blue);
+  color: white;
+  border: none;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s ease;
+}
+
+.btn-primary-figma:hover {
+  background-color: var(--figma-blue-hover);
+}
+
+.btn-secondary-figma {
+  background-color: var(--figma-surface);
+  color: var(--figma-text);
+  border: 1px solid var(--figma-border-light);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.btn-secondary-figma:hover {
+  background-color: var(--figma-surface-hover);
+  border-color: #666;
+}
+
+.screen-select-dropdown {
+  background-color: var(--figma-surface);
+  color: var(--figma-text);
+  border: 1px solid var(--figma-border-light);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  outline: none;
+}
+
+/* --------------------------------------------------------------------------
+   App Layout
+   -------------------------------------------------------------------------- */
+.prototype-workspace {
+  flex: 1;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Left Sidebar: Layers & Screen Flow */
+.figma-sidebar-left {
+  width: 250px;
+  background-color: var(--figma-bg);
+  border-right: 1px solid var(--figma-border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.sidebar-section-title {
+  padding: 12px 14px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--figma-text-muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.screen-tree {
+  list-style: none;
+  overflow-y: auto;
+  flex: 1;
+  padding: 6px 8px;
+}
+
+.screen-tree-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--figma-text-secondary);
+  transition: all 0.15s ease;
+  margin-bottom: 2px;
+}
+
+.screen-tree-item:hover {
+  background-color: var(--figma-surface-hover);
+  color: var(--figma-text);
+}
+
+.screen-tree-item.active {
+  background-color: rgba(13, 153, 255, 0.2);
+  color: var(--figma-blue);
+  font-weight: 600;
+}
+
+.screen-badge-num {
+  font-size: 10px;
+  background-color: rgba(255, 255, 255, 0.08);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+}
+
+/* Right Sidebar: Design Tokens & Export */
+.figma-sidebar-right {
+  width: 270px;
+  background-color: var(--figma-bg);
+  border-left: 1px solid var(--figma-border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  z-index: 10;
+  overflow-y: auto;
+}
+
+.token-group {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--figma-border);
+}
+
+.token-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--figma-text-secondary);
+  margin-bottom: 10px;
+}
+
+.color-swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.swatch-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--figma-surface);
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.swatch-card:hover {
+  border-color: var(--figma-blue);
+}
+
+.swatch-circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.swatch-info {
+  overflow: hidden;
+}
+
+.swatch-name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--figma-text);
+}
+
+.swatch-hex {
+  color: var(--figma-text-muted);
+  font-family: var(--font-mono);
+  font-size: 9px;
+}
+
+/* --------------------------------------------------------------------------
+   Canvas & Phone Container
+   -------------------------------------------------------------------------- */
+.figma-canvas-area {
+  flex: 1;
+  position: relative;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: 
+    radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px) 0 0 / 24px 24px,
+    var(--figma-canvas);
+}
+
+/* Phone Mockup Frame (iPhone 15 Pro) */
+.device-frame-wrapper {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.device-frame {
+  width: 390px;
+  height: 844px;
+  background-color: #000000;
+  border-radius: 54px;
+  padding: 12px;
+  box-shadow: 
+    0 0 0 2px #333333,
+    0 0 0 4px #1a1a1a,
+    0 25px 60px rgba(0, 0, 0, 0.7),
+    0 0 100px rgba(13, 153, 255, 0.15);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.device-screen {
+  flex: 1;
+  background-color: var(--app-bg);
+  border-radius: 44px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hardware Dynamic Island */
+.dynamic-island {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 32px;
+  background-color: #000000;
+  border-radius: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  pointer-events: none;
+}
+
+.camera-lens {
+  width: 10px;
+  height: 10px;
+  background: #0a0a14;
+  border-radius: 50%;
+  border: 1px solid #1a1a2e;
+}
+
+.sensor-dot {
+  width: 7px;
+  height: 7px;
+  background: #0d0d1e;
+  border-radius: 50%;
+}
+
+/* Hardware Status Bar */
+.phone-status-bar {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  z-index: 999;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.phone-status-bar.dark-text {
+  color: #0f172a;
+}
+
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+/* Hardware Home Indicator */
+.home-indicator-bar {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 134px;
+  height: 5px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.home-indicator-bar.dark-bar {
+  background-color: rgba(15, 23, 42, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   Screen Content Container & Transitions
+   -------------------------------------------------------------------------- */
+.screen-viewport {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.mobile-screen-view {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  flex-direction: column;
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.mobile-screen-view.active {
+  display: flex;
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* --------------------------------------------------------------------------
+   CANVAS GRID MODE (All Artboards Side by Side)
+   -------------------------------------------------------------------------- */
+.artboards-grid-view {
+  display: none;
+  gap: 36px;
+  padding: 60px 40px;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.artboards-grid-view.active {
+  display: flex;
+}
+
+.artboard-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.artboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--figma-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0 4px;
+}
+
+.artboard-dims {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--figma-text-muted);
+}
+
+.artboard-frame {
+  width: 320px;
+  height: 692px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  border: 1px solid var(--figma-border);
+  transition: all 0.2s ease;
+}
+
+.artboard-frame:hover {
+  border-color: var(--figma-blue);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(13, 153, 255, 0.25);
+}
+
+/* --------------------------------------------------------------------------
+   App Screen Specific UIs
+   -------------------------------------------------------------------------- */
+
+/* SCREEN 1: SPLASH */
+.screen-splash {
+  background: linear-gradient(180deg, #07152B 0%, #0F274A 55%, #132F5A 100%);
+  color: white;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 30px;
+  position: relative;
+  cursor: pointer;
+}
+
+.splash-glow-ring {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: rgba(56, 189, 248, 0.15);
+  box-shadow: 0 0 45px rgba(56, 189, 248, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(96, 165, 250, 0.4);
+  animation: pulseLogo 2.5s infinite ease-in-out;
+  margin-bottom: 24px;
+}
+
+.splash-logo-circle {
+  width: 95px;
+  height: 95px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.splash-logo-circle svg {
+  width: 58px;
+  height: 58px;
+}
+
+.splash-title {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  margin-bottom: 8px;
+}
+
+.splash-badge {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #93c5fd;
+  margin-bottom: 40px;
+}
+
+.splash-dots {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.splash-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #60a5fa;
+  border-radius: 50%;
+  animation: bounceDot 1.4s infinite ease-in-out both;
+}
+
+.splash-dot:nth-child(1) { animation-delay: -0.32s; }
+.splash-dot:nth-child(2) { animation-delay: -0.16s; }
+
+.splash-status-text {
+  font-size: 11px;
+  color: #94a3b8;
+  letter-spacing: 0.3px;
+}
+
+.splash-footer {
+  position: absolute;
+  bottom: 24px;
+  text-align: center;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* SCREEN 2: LOGIN */
+.screen-login {
+  background-color: #f1f5f9;
+}
+
+.login-header-banner {
+  background: linear-gradient(135deg, #0f274a 0%, #1e3a8a 100%);
+  padding: 55px 24px 30px;
+  color: white;
+  border-bottom-left-radius: 28px;
+  border-bottom-right-radius: 28px;
+  box-shadow: 0 10px 25px rgba(15, 39, 74, 0.2);
+}
+
+.login-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.login-brand-icon {
+  width: 44px;
+  height: 44px;
+  background: white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.login-title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.login-subtitle {
+  font-size: 11px;
+  color: #93c5fd;
+}
+
+.login-card {
+  margin: -15px 20px 24px;
+  background: white;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+.role-tabs {
+  display: flex;
+  background: #f1f5f9;
+  border-radius: 8px;
+  padding: 3px;
+  margin-bottom: 18px;
+}
+
+.role-tab-btn {
+  flex: 1;
+  text-align: center;
+  padding: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.role-tab-btn.active {
+  background: white;
+  color: #0f274a;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 5px;
+}
+
+.input-box {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1.5px solid #cbd5e1;
+  background: #f8fafc;
+  font-size: 13px;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s ease;
+}
+
+.input-box:focus {
+  border-color: #1e3a8a;
+  background: white;
+}
+
+.btn-submit-app {
+  width: 100%;
+  padding: 12px;
+  background: #0f274a;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 4px 12px rgba(15, 39, 74, 0.25);
+  transition: all 0.15s ease;
+}
+
+.btn-submit-app:hover {
+  background: #1e3a8a;
+}
+
+.demo-credentials-box {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 14px;
+  font-size: 11px;
+}
+
+.demo-chip {
+  display: inline-block;
+  background: #e2e8f0;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-top: 4px;
+}
+
+/* SCREEN 3: HOME DASHBOARD */
+.screen-home {
+  background-color: #f8fafc;
+  padding-bottom: 70px;
+}
+
+.home-top-bar {
+  background: #0f274a;
+  padding: 50px 20px 20px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.doctor-profile-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #1e3a8a;
+  border: 2px solid #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.doctor-name {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.doctor-unit {
+  font-size: 11px;
+  color: #93c5fd;
+}
+
+.stats-grid-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 16px 20px 8px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+}
+
+.stat-num {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f274a;
+  margin: 4px 0 2px;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.action-buttons-section {
+  padding: 10px 20px;
+}
+
+.primary-cta-card {
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  color: white;
+  padding: 16px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.28);
+  margin-bottom: 12px;
+}
+
+.recent-patients-list {
+  padding: 0 20px;
+}
+
+.patient-row-card {
+  background: white;
+  border-radius: 12px;
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.status-pill {
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.status-normal { background: #dcfce7; color: #15803d; }
+.status-oligo { background: #fee2e2; color: #b91c1c; }
+
+/* Bottom Nav Bar */
+.bottom-nav-mobile {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: white;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: 8px;
+  z-index: 50;
+}
+
+.nav-tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  color: #94a3b8;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.nav-tab-item.active {
+  color: #1e3a8a;
+}
+
+/* SCREEN 8: DIAGNOSTIC REPORT */
+.screen-report {
+  background: #f8fafc;
+  padding-bottom: 40px;
+}
+
+.report-header-card {
+  background: #0f274a;
+  color: white;
+  padding: 48px 20px 24px;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+}
+
+.score-badge-huge {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid #10b981;
+  color: #10b981;
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: inline-block;
+  font-weight: 800;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.metrics-table-card {
+  margin: 16px 20px;
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+.metric-bar-row {
+  margin-bottom: 14px;
+}
+
+.metric-row-title {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.metric-progress-track {
+  height: 8px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.metric-progress-fill {
+  height: 100%;
+  border-radius: 4px;
+}
+
+/* Keyframe Animations */
+@keyframes pulseLogo {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(56, 189, 248, 0.25); }
+  50% { transform: scale(1.06); box-shadow: 0 0 50px rgba(56, 189, 248, 0.5); }
+}
+
+@keyframes bounceDot {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}

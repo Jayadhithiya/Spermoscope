@@ -268,7 +268,7 @@ def serve_upload(filename):
 # ── Start ─────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    print("\n  Mock Spermoscope Backend running at http://localhost:8080")
+    print("\n  Mock Spermoscope Backend running at http://180.235.121.245:8080 (and http://localhost:8080)")
     print("  Login: doctor@demo.com / password123")
     print("  Admin: admin@demo.com  / admin123\n")
     app.run(host="0.0.0.0", port=8080, debug=True, use_reloader=False)

@@ -82,6 +82,7 @@ class _PatientDetailsFormState extends State<PatientDetailsForm> {
           'alcoholic': _isAlcoholic ? 'Yes' : 'No',
           'smoker': _isSmoker ? 'Yes' : 'No',
           'drugs': _isUsingDrugs ? 'Yes' : 'No',
+          'doctor_email': widget.email.trim(),
         }),
         headers: {'Content-Type': 'application/json'},
       );
