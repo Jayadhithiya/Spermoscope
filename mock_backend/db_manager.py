@@ -82,8 +82,8 @@ def init_db_connection():
     try:
         client = pymongo.MongoClient(
             MONGODB_URI,
-            serverSelectionTimeoutMS=4000,
-            connectTimeoutMS=4000,
+            serverSelectionTimeoutMS=1500,
+            connectTimeoutMS=1500,
         )
         # Test connection
         client.admin.command('ping')
@@ -115,10 +115,10 @@ def is_using_mongo():
     if _use_mongo and _mongo_db is not None:
         return True
 
-    # Try reconnecting every 60 seconds
+    # Try reconnecting every 300 seconds (5 mins) if failed
     import time
     now = time.time()
-    if now - _last_connection_attempt < 60:
+    if now - _last_connection_attempt < 300:
         return False
 
     _last_connection_attempt = now
@@ -249,10 +249,12 @@ def get_recent_patients(doctor_email: str = None, doctor_uid: str = None):
 
     with get_sqlite_conn() as conn:
         if target_uids:
-            placeholders = ",".join("?" for _ in target_uids)
+            all_uids = list(target_uids) + [str(x).lower() for x in target_uids]
+            unique_uids = list(set(all_uids))
+            placeholders = ",".join("?" for _ in unique_uids)
             rows = conn.execute(
-                f"SELECT * FROM patients WHERE doctor_uid IN ({placeholders}) ORDER BY created_at DESC LIMIT 20",
-                tuple(target_uids)
+                f"SELECT * FROM patients WHERE doctor_uid IN ({placeholders}) OR LOWER(doctor_uid) IN ({placeholders}) ORDER BY created_at DESC LIMIT 20",
+                tuple(unique_uids) + tuple(unique_uids)
             ).fetchall()
         else:
             rows = conn.execute("SELECT * FROM patients ORDER BY created_at DESC LIMIT 20").fetchall()
@@ -271,9 +273,6 @@ def get_patient_by_id_or_name(query: str):
                 {"name": {"$regex": f"^{q}$", "$options": "i"}}
             ]
         })
-        if not doc:
-            # First patient fallback
-            doc = _mongo_db.patients.find_one()
         if doc:
             doc.pop("_id", None)
             return doc
@@ -283,8 +282,6 @@ def get_patient_by_id_or_name(query: str):
         row = conn.execute("SELECT * FROM patients WHERE patient_id=?", (q,)).fetchone()
         if not row:
             row = conn.execute("SELECT * FROM patients WHERE LOWER(name)=?", (q.lower(),)).fetchone()
-        if not row:
-            row = conn.execute("SELECT * FROM patients LIMIT 1").fetchone()
         return dict(row) if row else None
 
 

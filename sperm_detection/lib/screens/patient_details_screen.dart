@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'Urls.dart';
 import 'edit_patient_screen.dart';
+import 'result_screen.dart';
 
 class PatientDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> patient;
@@ -265,6 +266,32 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
                         Row(
                           children: [
                             Expanded(
+                              flex: 3,
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => ResultScreen(
+                                        initialUid: patientId,
+                                        doctorEmail: widget.patient['doctor_email']?.toString(),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(Icons.biotech_rounded, size: 20),
+                                label: const Text('Specimens & Motility Stages', style: TextStyle(fontWeight: FontWeight.w600)),
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                  backgroundColor: const Color(0xFF1E3A8A),
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              flex: 2,
                               child: OutlinedButton.icon(
                                 onPressed: _navigateToEditScreen,
                                 icon: const Icon(Icons.edit_note_rounded, size: 20),

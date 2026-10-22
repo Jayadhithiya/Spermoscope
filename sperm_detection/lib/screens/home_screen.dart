@@ -113,9 +113,15 @@ class _HomeScreenState extends State<HomeScreen> {
       );
       if (res == true) _fetchRecentPatients();
     } else if (index == 2) {
+      final firstPid = _recentPatients.isNotEmpty ? _recentPatients.first['patient_id']?.toString() : null;
       await Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => const ResultScreen()),
+        MaterialPageRoute(
+          builder: (_) => ResultScreen(
+            doctorEmail: widget.email,
+            initialUid: firstPid,
+          ),
+        ),
       );
     }
   }
@@ -556,20 +562,45 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => PatientDetailsScreen(patient: patient)),
-                ).then((_) => _fetchRecentPatients());
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF1E3A8A),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              ),
-              child: const Text('View Record', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+            Wrap(
+              spacing: 6,
+              children: [
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ResultScreen(
+                          doctorEmail: widget.email,
+                          initialUid: id,
+                        ),
+                      ),
+                    ).then((_) => _fetchRecentPatients());
+                  },
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: const Color(0xFF1E3A8A),
+                    side: const BorderSide(color: Color(0xFF1E3A8A)),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                  child: const Text('Analyze', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => PatientDetailsScreen(patient: patient)),
+                    ).then((_) => _fetchRecentPatients());
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF1E3A8A),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                  child: const Text('View Record', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                ),
+              ],
             ),
           ],
         ),

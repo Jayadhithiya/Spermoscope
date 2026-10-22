@@ -3,16 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sperm_detection/screens/graph_screen.dart';
 import 'Urls.dart';
+import 'patient_details_form.dart';
 import 'upload_sample_screen.dart';
 import 'view_result_screen.dart';
 
 class ResultScreen extends StatefulWidget {
-  static final List<bool> _sampleUnlocked = [true, false, false, false, false, false];
+  final String? initialUid;
+  final String? doctorEmail;
 
-  const ResultScreen({super.key});
+  const ResultScreen({super.key, this.initialUid, this.doctorEmail});
 
   @override
-  _ResultScreenState createState() => _ResultScreenState();
+  State<ResultScreen> createState() => _ResultScreenState();
 }
 
 class _ResultScreenState extends State<ResultScreen> {
@@ -20,12 +22,20 @@ class _ResultScreenState extends State<ResultScreen> {
   bool _searching = false;
   Map<String, dynamic>? _searchedPatient;
   int currentSample = 1;
+  Set<int> _uploadedSamples = <int>{};
+  List<String> _quickPatientIds = [];
 
   @override
   void initState() {
     super.initState();
-    // Default search for p001 so screen is immediately useful
-    _searchPatient('p001');
+    if (widget.initialUid != null && widget.initialUid!.trim().isNotEmpty) {
+      _searchController.text = widget.initialUid!.trim();
+      _searchPatient(widget.initialUid!.trim());
+    } else if (widget.doctorEmail != null && widget.doctorEmail!.trim().isNotEmpty) {
+      _loadDoctorLatestPatient();
+    } else {
+      _searchPatient('p001');
+    }
   }
 
   @override
@@ -34,20 +44,42 @@ class _ResultScreenState extends State<ResultScreen> {
     super.dispose();
   }
 
-  void _resetSampleLockStatus() {
-    for (int i = 0; i < 6; i++) {
-      ResultScreen._sampleUnlocked[i] = (i == 0);
-    }
-  }
+  Future<void> _loadDoctorLatestPatient() async {
+    setState(() => _searching = true);
+    try {
+      final emailParam = Uri.encodeComponent(widget.doctorEmail!.trim());
+      final res = await http.get(Uri.parse('${Urls.Url}/recent_patients?email=$emailParam'));
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        if (data is List && data.isNotEmpty) {
+          final ids = data
+              .map<String>((p) => p['patient_id']?.toString() ?? '')
+              .where((id) => id.isNotEmpty)
+              .take(5)
+              .toList();
 
-  void _unlockSamples(int currentSampleInt) {
-    for (int i = 0; i < 6; i++) {
-      ResultScreen._sampleUnlocked[i] = false;
+          if (mounted) {
+            setState(() {
+              _quickPatientIds = ids;
+            });
+          }
+
+          final firstPid = data.first['patient_id']?.toString() ?? '';
+          if (firstPid.isNotEmpty) {
+            _searchController.text = firstPid;
+            await _searchPatient(firstPid);
+            return;
+          }
+        }
+      }
+    } catch (_) {}
+
+    if (mounted) {
+      setState(() {
+        _searching = false;
+        _searchedPatient = null;
+      });
     }
-    if (currentSampleInt >= 1 && currentSampleInt <= 6) {
-      ResultScreen._sampleUnlocked[currentSampleInt - 1] = true;
-    }
-    if (mounted) setState(() {});
   }
 
   Future<void> _searchPatient(String query) async {
@@ -56,7 +88,6 @@ class _ResultScreenState extends State<ResultScreen> {
 
     setState(() {
       _searching = true;
-      _resetSampleLockStatus();
     });
 
     try {
@@ -75,7 +106,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 ? data['current_sample']
                 : int.tryParse(data['current_sample']?.toString() ?? '1') ?? 1;
           });
-          await _getSampleStatus();
+          await _getSampleStatus(q);
         }
       } else {
         _handleSearchError('Patient record "$q" not found');
@@ -98,8 +129,7 @@ class _ResultScreenState extends State<ResultScreen> {
     );
   }
 
-  Future<void> _getSampleStatus() async {
-    final uid = _searchedPatient?['patient']?['uid']?.toString() ?? '';
+  Future<void> _getSampleStatus(String uid) async {
     if (uid.isEmpty) return;
 
     try {
@@ -110,32 +140,49 @@ class _ResultScreenState extends State<ResultScreen> {
 
       if (response.statusCode == 200) {
         final sampleStatus = jsonDecode(response.body);
-        final int cur = sampleStatus['current_sample'] ?? 1;
-        _unlockSamples(cur);
+        final int cur = sampleStatus['current_sample'] is int
+            ? sampleStatus['current_sample']
+            : int.tryParse(sampleStatus['current_sample']?.toString() ?? '1') ?? 1;
+
+        final Set<int> uploaded = {};
+        if (sampleStatus['uploaded_samples'] is List) {
+          for (final item in sampleStatus['uploaded_samples']) {
+            if (item is int) {
+              uploaded.add(item);
+            } else if (item is String && int.tryParse(item) != null) {
+              uploaded.add(int.parse(item));
+            }
+          }
+        }
+
+        if (mounted) {
+          setState(() {
+            currentSample = cur;
+            _uploadedSamples = uploaded;
+          });
+        }
       }
     } catch (e) {
       debugPrint('Error fetching sample status: $e');
     }
   }
 
-  Future<void> _updateCurrentSample() async {
-    final uid = _searchedPatient?['patient']?['uid']?.toString() ?? '';
-    if (uid.isEmpty) return;
+  Future<void> _openUploadScreen(String uid, int sampleNum) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UploadSampleScreen(
+          uid: uid,
+          sampleType: sampleNum.toString(),
+        ),
+      ),
+    );
 
-    try {
-      final response = await http.put(
-        Uri.parse('${Urls.Url}/result/update_current_sample/$uid'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'current_sample': currentSample}),
-      );
-
-      if (response.statusCode == 200) {
-        setState(() {
-          currentSample = (currentSample < 6) ? currentSample + 1 : 6;
-        });
-        _unlockSamples(currentSample);
-      }
-    } catch (_) {}
+    // Refresh immediately on return so stage status and charts reflect new specimen
+    if (mounted) {
+      await _getSampleStatus(uid);
+      await _searchPatient(uid);
+    }
   }
 
   @override
@@ -184,7 +231,7 @@ class _ResultScreenState extends State<ResultScreen> {
                               controller: _searchController,
                               style: const TextStyle(color: Color(0xFF0F172A), fontSize: 14, fontWeight: FontWeight.w500),
                               decoration: InputDecoration(
-                                hintText: 'Enter Patient ID (e.g. p001) or Name',
+                                hintText: 'Enter Patient ID or Name',
                                 hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
                                 prefixIcon: const Icon(Icons.search_rounded, color: Color(0xFF64748B), size: 20),
                                 filled: true,
@@ -220,11 +267,16 @@ class _ResultScreenState extends State<ResultScreen> {
                       const SizedBox(height: 10),
                       Wrap(
                         spacing: 8,
+                        runSpacing: 6,
                         children: [
                           const Text('Quick ID:', style: TextStyle(color: Color(0xFF64748B), fontSize: 12)),
-                          _quickIdChip('p001'),
-                          _quickIdChip('p002'),
-                          _quickIdChip('p003'),
+                          if (_quickPatientIds.isNotEmpty)
+                            ..._quickPatientIds.map((id) => _quickIdChip(id))
+                          else ...[
+                            _quickIdChip('p001'),
+                            _quickIdChip('p002'),
+                            _quickIdChip('p003'),
+                          ],
                         ],
                       ),
                     ],
@@ -275,7 +327,7 @@ class _ResultScreenState extends State<ResultScreen> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                'UID: ${p['uid'] ?? 'p001'}  ·  Age: ${p['age'] ?? '-'}  ·  Occupation: ${p['occupation'] ?? 'N/A'}',
+                                'UID: ${p['uid'] ?? 'ID-Pending'}  ·  Age: ${p['age'] ?? '-'}  ·  Occupation: ${p['occupation'] ?? 'N/A'}',
                                 style: const TextStyle(fontSize: 12, color: Color(0xFF64748B)),
                               ),
                             ],
@@ -310,10 +362,34 @@ class _ResultScreenState extends State<ResultScreen> {
                   ),
                   const SizedBox(height: 10),
 
-                  // List of 6 sample tiles
+                  // List of 6 sample tiles (ALL upload buttons active and responsive)
                   ...List.generate(6, (index) {
                     final sampleNum = index + 1;
-                    final isUnlocked = ResultScreen._sampleUnlocked[index];
+                    final isUploaded = _uploadedSamples.contains(sampleNum);
+                    final isCurrent = sampleNum == currentSample;
+
+                    Color circleBg = const Color(0xFFF1F5F9);
+                    Color circleTextColor = const Color(0xFF64748B);
+                    Color borderColor = const Color(0xFFE2E8F0);
+                    String subtitleText = 'Ready for microscopic analysis';
+                    Color subtitleColor = const Color(0xFF059669);
+
+                    if (isUploaded) {
+                      circleBg = const Color(0xFFECFDF5);
+                      circleTextColor = const Color(0xFF059669);
+                      borderColor = const Color(0xFFA7F3D0);
+                      subtitleText = 'Analysis recorded · Ready for review or re-upload';
+                      subtitleColor = const Color(0xFF059669);
+                    } else if (isCurrent) {
+                      circleBg = const Color(0xFFEFF6FF);
+                      circleTextColor = const Color(0xFF1E3A8A);
+                      borderColor = const Color(0xFF93C5FD);
+                      subtitleText = 'Active stage · Ready for microscopic analysis';
+                      subtitleColor = const Color(0xFF2563EB);
+                    } else {
+                      subtitleText = 'Stage $sampleNum available for specimen capture';
+                      subtitleColor = const Color(0xFF64748B);
+                    }
 
                     return Container(
                       margin: const EdgeInsets.only(bottom: 12),
@@ -322,8 +398,8 @@ class _ResultScreenState extends State<ResultScreen> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(
-                          color: isUnlocked ? const Color(0xFF93C5FD) : const Color(0xFFE2E8F0),
-                          width: isUnlocked ? 1.5 : 1,
+                          color: borderColor,
+                          width: (isCurrent || isUploaded) ? 1.5 : 1,
                         ),
                       ),
                       child: Row(
@@ -332,18 +408,20 @@ class _ResultScreenState extends State<ResultScreen> {
                             width: 38,
                             height: 38,
                             decoration: BoxDecoration(
-                              color: isUnlocked ? const Color(0xFFEFF6FF) : const Color(0xFFF1F5F9),
+                              color: circleBg,
                               shape: BoxShape.circle,
                             ),
                             child: Center(
-                              child: Text(
-                                '#$sampleNum',
-                                style: TextStyle(
-                                  color: isUnlocked ? const Color(0xFF1E3A8A) : const Color(0xFF94A3B8),
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 13,
-                                ),
-                              ),
+                              child: isUploaded
+                                  ? const Icon(Icons.check_rounded, color: Color(0xFF059669), size: 18)
+                                  : Text(
+                                      '#$sampleNum',
+                                      style: TextStyle(
+                                        color: circleTextColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 13,
+                                      ),
+                                    ),
                             ),
                           ),
                           const SizedBox(width: 14),
@@ -351,18 +429,37 @@ class _ResultScreenState extends State<ResultScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Specimen Sample $sampleNum',
-                                  style: TextStyle(
-                                    color: isUnlocked ? const Color(0xFF0F172A) : const Color(0xFF64748B),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Specimen Sample $sampleNum',
+                                      style: const TextStyle(
+                                        color: Color(0xFF0F172A),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    if (isUploaded) ...[
+                                      const SizedBox(width: 6),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFECFDF5),
+                                          borderRadius: BorderRadius.circular(4),
+                                        ),
+                                        child: const Text(
+                                          'Recorded',
+                                          style: TextStyle(color: Color(0xFF059669), fontSize: 10, fontWeight: FontWeight.w700),
+                                        ),
+                                      ),
+                                    ],
+                                  ],
                                 ),
+                                const SizedBox(height: 2),
                                 Text(
-                                  isUnlocked ? 'Ready for microscopic analysis' : 'Stage locked until previous is processed',
+                                  subtitleText,
                                   style: TextStyle(
-                                    color: isUnlocked ? const Color(0xFF059669) : const Color(0xFF94A3B8),
+                                    color: subtitleColor,
                                     fontSize: 11,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -374,25 +471,16 @@ class _ResultScreenState extends State<ResultScreen> {
                             spacing: 8,
                             children: [
                               OutlinedButton.icon(
-                                onPressed: isUnlocked
-                                    ? () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => UploadSampleScreen(
-                                              uid: p['uid'].toString(),
-                                              sampleType: sampleNum.toString(),
-                                            ),
-                                          ),
-                                        ).then((_) => _updateCurrentSample());
-                                      }
-                                    : null,
+                                onPressed: () => _openUploadScreen(p['uid'].toString(), sampleNum),
                                 icon: const Icon(Icons.cloud_upload_outlined, size: 16),
-                                label: const Text('Upload', style: TextStyle(fontSize: 12)),
+                                label: Text(
+                                  isUploaded ? 'Re-upload' : 'Upload',
+                                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                                ),
                                 style: OutlinedButton.styleFrom(
                                   foregroundColor: const Color(0xFF1E3A8A),
-                                  side: BorderSide(color: isUnlocked ? const Color(0xFF1E3A8A) : const Color(0xFFCBD5E1)),
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                  side: const BorderSide(color: Color(0xFF1E3A8A), width: 1.2),
+                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                                 ),
                               ),
                               ElevatedButton.icon(
@@ -410,11 +498,11 @@ class _ResultScreenState extends State<ResultScreen> {
                                   );
                                 },
                                 icon: const Icon(Icons.assessment_outlined, size: 16),
-                                label: const Text('Report', style: TextStyle(fontSize: 12)),
+                                label: const Text('Report', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF1E3A8A),
                                   foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                                 ),
                               ),
                             ],
@@ -425,17 +513,47 @@ class _ResultScreenState extends State<ResultScreen> {
                   }),
                 ] else
                   Container(
-                    padding: const EdgeInsets.all(32),
+                    padding: const EdgeInsets.all(36),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(color: const Color(0xFFE2E8F0)),
                     ),
-                    child: const Center(
-                      child: Text(
-                        'No patient record found. Try searching for "p001" or "Ali Raza".',
-                        style: TextStyle(color: Color(0xFF64748B), fontSize: 14),
-                      ),
+                    child: Column(
+                      children: [
+                        const Icon(Icons.person_search_rounded, size: 48, color: Color(0xFF94A3B8)),
+                        const SizedBox(height: 14),
+                        const Text(
+                          'No Patient Selected',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Color(0xFF0F172A)),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Search for an existing patient ID above, or register a new intake to begin microscopic sample analysis.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Color(0xFF64748B), fontSize: 13, height: 1.4),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton.icon(
+                          onPressed: () async {
+                            final res = await Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => PatientDetailsForm(email: widget.doctorEmail ?? '')),
+                            );
+                            if (res == true && widget.doctorEmail != null) {
+                              _loadDoctorLatestPatient();
+                            }
+                          },
+                          icon: const Icon(Icons.person_add_alt_1_rounded, size: 18),
+                          label: const Text('Register New Patient Intake', style: TextStyle(fontWeight: FontWeight.w600)),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF1E3A8A),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 const SizedBox(height: 32),
@@ -454,7 +572,7 @@ class _ResultScreenState extends State<ResultScreen> {
         _searchPatient(id);
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
         decoration: BoxDecoration(
           color: const Color(0xFFEFF6FF),
           borderRadius: BorderRadius.circular(6),
